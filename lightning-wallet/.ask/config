@@ -1,9 +1,33 @@
 {
   "deploy_settings": {
     "default": {
-      "skill_id": "",
+      "skill_id": "amzn1.ask.skill.c0bc9aeb-da57-4286-999d-8e1f0017c569",
       "was_cloned": false,
-      "merge": {}
+      "merge": {},
+      "resources": {
+        "manifest": {
+          "eTag": "04d4b22b597c005522196fceed73ebc9"
+        },
+        "interactionModel": {
+          "en-US": {
+            "eTag": "241d71de4ecf1f81afb851db8d9e6d77"
+          }
+        },
+        "lambda": [
+          {
+            "alexaUsage": [
+              "custom/default"
+            ],
+            "arn": "arn:aws:lambda:us-east-1:452047556756:function:ask-custom-lightning-wallet-default",
+            "awsRegion": "us-east-1",
+            "codeUri": "lambda/custom",
+            "functionName": "ask-custom-lightning-wallet-default",
+            "handler": "index.handler",
+            "revisionId": "8f57bf47-c22f-4613-920b-c58e3ee63391",
+            "runtime": "nodejs8.10"
+          }
+        ]
+      }
     }
   }
 }
