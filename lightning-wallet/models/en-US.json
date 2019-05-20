@@ -20,6 +20,118 @@
           "samples": [
             "hello"
           ]
+        },
+        {
+          "name": "SendPaymentIntent",
+          "samples": [
+            "send a payment",
+            "create new payment",
+            "pay an invoice",
+            "make a payment",
+            "pay for something"
+          ]
+        },
+        {
+          "name": "RequestPaymentIntent",
+          "samples": [
+            "request a payment",
+            "create a new invoice",
+            "create an invoice"
+          ]
+        },
+        {
+          "name": "ChannelsMenuIntent",
+          "samples": [
+            "view channels",
+            "view my channels"
+          ]
+        },
+        {
+          "name": "OpenChannelIntent",
+          "samples": [
+            "open a channel",
+            "open a new channel",
+            "create new channel",
+            "create a channel"
+          ]
+        },
+        {
+          "name": "CloseChannelIntent",
+          "samples": [
+            "close a channel",
+            "close channel",
+            "close an open channel"
+          ]
+        },
+        {
+          "name": "ListOpenChannelsIntent",
+          "samples": [
+            "list all channels",
+            "list all open channels"
+          ]
+        },
+        {
+          "name": "GetInformationAboutOpenChannelIntent",
+          "samples": [
+            "get information about an open channel"
+          ]
+        },
+        {
+          "name": "AddressBookMenuIntent",
+          "samples": [
+            "view address book",
+            "view my address book"
+          ]
+        },
+        {
+          "name": "ListAllAddressesIntent",
+          "samples": [
+            "list all saved addresses",
+            "list all addresses",
+            "list my addresses"
+          ]
+        },
+        {
+          "name": "AddNewAddressIntent",
+          "samples": [
+            "create a new address",
+            "add a new address"
+          ]
+        },
+        {
+          "name": "DeleteAddressIntent",
+          "samples": [
+            "delete an existing address",
+            "delete an address",
+            "delete address"
+          ]
+        },
+        {
+          "name": "OpenSettingsMenuIntent",
+          "samples": [
+            "view settings",
+            "open settings",
+            "go to settings",
+            "change my settings"
+          ]
+        },
+        {
+          "name": "SetFiatCurrencyIntent",
+          "samples": [
+            "set fiat currency"
+          ]
+        },
+        {
+          "name": "SetBitcoinUnitIntent",
+          "samples": [
+            "set bitcoin unit"
+          ]
+        },
+        {
+          "name": "MainMenuIntent",
+          "samples": [
+            "main menu"
+          ]
         }
       ]
     }
