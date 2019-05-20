@@ -10,7 +10,7 @@
         },
         "interactionModel": {
           "en-US": {
-            "eTag": "241d71de4ecf1f81afb851db8d9e6d77"
+            "eTag": "54e3cb11764129d41286e9e6553db4a2"
           }
         },
         "lambda": [
@@ -23,7 +23,7 @@
             "codeUri": "lambda/custom",
             "functionName": "ask-custom-lightning-wallet-default",
             "handler": "index.handler",
-            "revisionId": "8f57bf47-c22f-4613-920b-c58e3ee63391",
+            "revisionId": "232a4668-90d3-4420-ad22-400ed509a26e",
             "runtime": "nodejs8.10"
           }
         ]
