@@ -1,4 +1,5 @@
 const Alexa = require('ask-sdk-core');
+const lightning = require('./lnd_grpc_interface');
 
 const MAIN_MENU_PROMPT = `Main Menu. You can send or request a payment.
                           View your channels. Or view your address book.
@@ -109,6 +110,19 @@ const OpenChannelHandler = {
     let repromptText = "";
 
     speechText += "Handle opening a channel. ";
+
+    //open a channel to alice using bob
+    let request = {};
+    lightning.getInfo(request, function(err, response) {
+      if(err) {
+        speechText += "Error when getting info. ";
+        console.log(err);
+      }
+      else {
+        speechText += "Successfully got info. ";
+        console.log(response);
+      }
+    });
 
     return handlerInput.responseBuilder
       .speak(speechText)
