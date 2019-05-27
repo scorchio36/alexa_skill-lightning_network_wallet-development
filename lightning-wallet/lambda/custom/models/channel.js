@@ -12,3 +12,5 @@ Channel.prototype.getPubKey = function() {
 Channel.prototype.getFundingAmt = function() {
   return this.fundingAmt;
 }
+
+module.exports = Channel;

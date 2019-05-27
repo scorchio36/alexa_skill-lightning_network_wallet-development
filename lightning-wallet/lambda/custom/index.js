@@ -1,5 +1,7 @@
 const Alexa = require('ask-sdk-core');
 const lightning = require('./lnd_grpc_interface');
+const User = require('./models/user');
+const Address = require('./models/address');
 
 const MAIN_MENU_PROMPT = `Main Menu. You can send or request a payment.
                           View your channels. Or view your address book.
@@ -29,10 +31,25 @@ const LaunchRequestHandler = {
     let speechText = "";
     let repromptText = "";
 
+    //get current session data
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
     speechText += 'Welcome to the lightning wallet. ';
     speechText += MAIN_MENU_PROMPT;
     repromptText += MAIN_MENU_PROMPT;
 
+    //Create a remote "Bob" address that our user can connect to
+    /*In the future this will be taken care of through user iniput rather
+    than hardcoded into the app. */
+    let bobAddress = new Address('Bob', '03ac2c185f8ac3122028572a44b3c8d85af39ffca3e2d705c92a435149f6118ef5@3.83.83.82:10002');
+    let user = new User();
+    user.getAddressBook().addAddress(bobAddress);
+
+    //save current user in current sessionn
+    sessionAttributes.user = JSON.stringify(user);
+
+    //save current session data
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     return handlerInput.responseBuilder
       .speak(speechText)
@@ -52,7 +69,24 @@ const SendPaymentHandler = {
     let speechText = "";
     let repromptText = "";
 
-    speechText += "Handle sending payments here. "
+    const sessionAttributes = handlerInput.attributesManager.getSessionAttributes();
+
+    let user = new User(JSON.parse(sessionAttributes.user)); //get user here from sessionVariables
+
+    //Are there any open channels?
+    if(user.getChannelList().length) { //there are open channels
+      //Handle sending a payment:
+      //Which channel would you like to use/Who would you like to send the money to?
+      //How much would you like to send?
+      //Handle verification as well (Make sure user actually has that much money availble)
+    }
+    else { //no open channels
+      speechText += "I am sorry. You currently do not have any open channels. ";
+      speechText += "You need to open a channel in order to send a payment. ";
+    }
+
+    sessionAttributes.user = JSON.stringify(user);
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     return handlerInput.responseBuilder
       .speak(speechText)
@@ -68,10 +102,13 @@ const RequestPaymentHandler = {
     && handlerInput.requestEnvelope.request.intent.name === 'RequestPaymentIntent';
   },
   handle(handlerInput) {
+
     let speechText = "";
     let repromptText = "";
 
-    speechText += "Handle creating invoices here. ";
+    //Generate Invoice
+    //How much would you like to request?
+    //Send the payment ID to an Alexa Card for the user to copy and use
 
     return handlerInput.responseBuilder
       .speak(speechText)
@@ -109,10 +146,25 @@ const OpenChannelHandler = {
     let speechText = "";
     let repromptText = "";
 
-    speechText += "Handle opening a channel. ";
+    let sessionAttributes = handlerInput.attributesManager.getSessionAttributes(); //get the user from the sessionVariables
 
-    //open a channel to alice using bob
-    let request = {};
+    let user = new User(JSON.parse(sessionAttributes.user));
+
+    //Check if the user has any registered addresses
+    if(user.getAddressBook().length) {
+
+      //Who would you like to open a channel with?
+      //How much would you like to commit to the channel
+    }
+    else { //The user currently has no addresses
+      speechText += "You currently have nobody in your address book. ";
+      speechText += "You cannot open a new channel until you have at least "
+      speechText += "one address saved in your address book. You can add a new ";
+      speechText += "address to your address book by visting the website. ";
+    }
+
+    //GetInfo test
+    /*let request = {};
     lightning.getInfo(request, function(err, response) {
       if(err) {
         speechText += "Error when getting info. ";
@@ -122,7 +174,9 @@ const OpenChannelHandler = {
         speechText += "Successfully got info. ";
         console.log(response);
       }
-    });
+    });*/
+
+    handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
 
     return handlerInput.responseBuilder
       .speak(speechText)

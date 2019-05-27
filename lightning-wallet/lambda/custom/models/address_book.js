@@ -16,4 +16,8 @@ AddressBook.prototype.getAddressList= function() {
   return this.addressList;
 }
 
+AddressBook.prototype.length = function() {
+  return this.addressList.length;
+}
+
 module.exports = AddressBook;
