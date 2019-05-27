@@ -23,7 +23,7 @@
             "codeUri": "lambda/custom",
             "functionName": "ask-custom-lightning-wallet-default",
             "handler": "index.handler",
-            "revisionId": "41c29a9a-362c-463f-9424-8a646243c631",
+            "revisionId": "c0cb3f60-a689-4d64-a7a2-97355151584d",
             "runtime": "nodejs8.10"
           }
         ]
