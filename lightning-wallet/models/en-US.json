@@ -1,139 +1,247 @@
 {
-  "interactionModel": {
-    "languageModel": {
-      "invocationName": "lightning wallet",
-      "intents": [
-        {
-          "name": "AMAZON.CancelIntent",
-          "samples": []
+    "interactionModel": {
+        "languageModel": {
+            "invocationName": "lightning wallet",
+            "intents": [
+                {
+                    "name": "AMAZON.CancelIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.HelpIntent",
+                    "samples": []
+                },
+                {
+                    "name": "AMAZON.StopIntent",
+                    "samples": []
+                },
+                {
+                    "name": "HelloWorldIntent",
+                    "slots": [],
+                    "samples": [
+                        "hello"
+                    ]
+                },
+                {
+                    "name": "SendPaymentIntent",
+                    "slots": [],
+                    "samples": [
+                        "send a payment",
+                        "create new payment",
+                        "pay an invoice",
+                        "make a payment",
+                        "pay for something"
+                    ]
+                },
+                {
+                    "name": "RequestPaymentIntent",
+                    "slots": [],
+                    "samples": [
+                        "request a payment",
+                        "create a new invoice",
+                        "create an invoice"
+                    ]
+                },
+                {
+                    "name": "ChannelsMenuIntent",
+                    "slots": [],
+                    "samples": [
+                        "view channels",
+                        "view my channels"
+                    ]
+                },
+                {
+                    "name": "OpenChannelIntent",
+                    "slots": [
+                        {
+                            "name": "nickname",
+                            "type": "AMAZON.FirstName",
+                            "samples": [
+                                "{nickname}"
+                            ]
+                        },
+                        {
+                            "name": "amount",
+                            "type": "AMAZON.NUMBER",
+                            "samples": [
+                                "{amount} satoshis",
+                                "{amount}"
+                            ]
+                        }
+                    ],
+                    "samples": [
+                        "open a channel",
+                        "open a new channel",
+                        "create new channel",
+                        "create a channel"
+                    ]
+                },
+                {
+                    "name": "CloseChannelIntent",
+                    "slots": [],
+                    "samples": [
+                        "close a channel",
+                        "close channel",
+                        "close an open channel"
+                    ]
+                },
+                {
+                    "name": "ListOpenChannelsIntent",
+                    "slots": [],
+                    "samples": [
+                        "list all channels",
+                        "list all open channels"
+                    ]
+                },
+                {
+                    "name": "GetInformationAboutOpenChannelIntent",
+                    "slots": [],
+                    "samples": [
+                        "get information about an open channel"
+                    ]
+                },
+                {
+                    "name": "AddressBookMenuIntent",
+                    "slots": [],
+                    "samples": [
+                        "view address book",
+                        "view my address book"
+                    ]
+                },
+                {
+                    "name": "ListAllAddressesIntent",
+                    "slots": [],
+                    "samples": [
+                        "list all saved addresses",
+                        "list all addresses",
+                        "list my addresses"
+                    ]
+                },
+                {
+                    "name": "AddNewAddressIntent",
+                    "slots": [],
+                    "samples": [
+                        "create a new address",
+                        "add a new address"
+                    ]
+                },
+                {
+                    "name": "DeleteAddressIntent",
+                    "slots": [],
+                    "samples": [
+                        "delete an existing address",
+                        "delete an address",
+                        "delete address"
+                    ]
+                },
+                {
+                    "name": "OpenSettingsMenuIntent",
+                    "slots": [],
+                    "samples": [
+                        "view settings",
+                        "open settings",
+                        "go to settings",
+                        "change my settings"
+                    ]
+                },
+                {
+                    "name": "SetFiatCurrencyIntent",
+                    "slots": [],
+                    "samples": [
+                        "set fiat currency"
+                    ]
+                },
+                {
+                    "name": "SetBitcoinUnitIntent",
+                    "slots": [],
+                    "samples": [
+                        "set bitcoin unit"
+                    ]
+                },
+                {
+                    "name": "MainMenuIntent",
+                    "slots": [],
+                    "samples": [
+                        "main menu"
+                    ]
+                },
+                {
+                    "name": "AMAZON.NavigateHomeIntent",
+                    "samples": []
+                }
+            ],
+            "types": []
         },
-        {
-          "name": "AMAZON.HelpIntent",
-          "samples": []
+        "dialog": {
+            "intents": [
+                {
+                    "name": "OpenChannelIntent",
+                    "delegationStrategy": "SKILL_RESPONSE",
+                    "confirmationRequired": false,
+                    "prompts": {},
+                    "slots": [
+                        {
+                            "name": "nickname",
+                            "type": "AMAZON.FirstName",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.1475977975535.180001543296",
+                                "elicitation": "Elicit.Slot.1475977975535.180001543296"
+                            }
+                        },
+                        {
+                            "name": "amount",
+                            "type": "AMAZON.NUMBER",
+                            "confirmationRequired": true,
+                            "elicitationRequired": true,
+                            "prompts": {
+                                "confirmation": "Confirm.Slot.1475977975535.539353944625",
+                                "elicitation": "Elicit.Slot.1475977975535.539353944625"
+                            }
+                        }
+                    ]
+                }
+            ],
+            "delegationStrategy": "ALWAYS"
         },
-        {
-          "name": "AMAZON.StopIntent",
-          "samples": []
-        },
-        {
-          "name": "HelloWorldIntent",
-          "samples": [
-            "hello"
-          ]
-        },
-        {
-          "name": "SendPaymentIntent",
-          "samples": [
-            "send a payment",
-            "create new payment",
-            "pay an invoice",
-            "make a payment",
-            "pay for something"
-          ]
-        },
-        {
-          "name": "RequestPaymentIntent",
-          "samples": [
-            "request a payment",
-            "create a new invoice",
-            "create an invoice"
-          ]
-        },
-        {
-          "name": "ChannelsMenuIntent",
-          "samples": [
-            "view channels",
-            "view my channels"
-          ]
-        },
-        {
-          "name": "OpenChannelIntent",
-          "samples": [
-            "open a channel",
-            "open a new channel",
-            "create new channel",
-            "create a channel"
-          ]
-        },
-        {
-          "name": "CloseChannelIntent",
-          "samples": [
-            "close a channel",
-            "close channel",
-            "close an open channel"
-          ]
-        },
-        {
-          "name": "ListOpenChannelsIntent",
-          "samples": [
-            "list all channels",
-            "list all open channels"
-          ]
-        },
-        {
-          "name": "GetInformationAboutOpenChannelIntent",
-          "samples": [
-            "get information about an open channel"
-          ]
-        },
-        {
-          "name": "AddressBookMenuIntent",
-          "samples": [
-            "view address book",
-            "view my address book"
-          ]
-        },
-        {
-          "name": "ListAllAddressesIntent",
-          "samples": [
-            "list all saved addresses",
-            "list all addresses",
-            "list my addresses"
-          ]
-        },
-        {
-          "name": "AddNewAddressIntent",
-          "samples": [
-            "create a new address",
-            "add a new address"
-          ]
-        },
-        {
-          "name": "DeleteAddressIntent",
-          "samples": [
-            "delete an existing address",
-            "delete an address",
-            "delete address"
-          ]
-        },
-        {
-          "name": "OpenSettingsMenuIntent",
-          "samples": [
-            "view settings",
-            "open settings",
-            "go to settings",
-            "change my settings"
-          ]
-        },
-        {
-          "name": "SetFiatCurrencyIntent",
-          "samples": [
-            "set fiat currency"
-          ]
-        },
-        {
-          "name": "SetBitcoinUnitIntent",
-          "samples": [
-            "set bitcoin unit"
-          ]
-        },
-        {
-          "name": "MainMenuIntent",
-          "samples": [
-            "main menu"
-          ]
-        }
-      ]
+        "prompts": [
+            {
+                "id": "Elicit.Slot.1475977975535.180001543296",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "With whom would you like to open a channel with?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.1475977975535.180001543296",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You would like to open a channel with {nickname} ?"
+                    }
+                ]
+            },
+            {
+                "id": "Elicit.Slot.1475977975535.539353944625",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "How many satoshis would you like to commit to the channel?"
+                    }
+                ]
+            },
+            {
+                "id": "Confirm.Slot.1475977975535.539353944625",
+                "variations": [
+                    {
+                        "type": "PlainText",
+                        "value": "You would like to commit {amount} satoshis to this channel?"
+                    }
+                ]
+            }
+        ]
     }
-  }
 }

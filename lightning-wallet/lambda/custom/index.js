@@ -45,6 +45,19 @@ const LaunchRequestHandler = {
     let user = new User();
     user.getAddressBook().addAddress(bobAddress);
 
+    console.log("USER ADDRESS BOOK LENGTH:" + user.getAddressBook().getLength());
+
+    //Bob should be the user's peer so that we can open channel/send payment
+    //CONNECT OVER P2P
+    /*let request = {
+      addr: (user.getAddressBook().getAddressFromNickname('Bob')).pubKey;
+    }
+
+    lightning.connectPeer(request, function(err, response) {
+      console.log("CONNECTING TO PEER");
+      console.log(response);
+    });*/
+
     //save current user in current sessionn
     sessionAttributes.user = JSON.stringify(user);
 
@@ -136,13 +149,101 @@ const ChannelsMenuHandler = {
   },
 }
 
-//Initiates the process of opening a new channel
-const OpenChannelHandler = {
+const StartedOpenChannelHandler = {
   canHandle(handlerInput) {
     return handlerInput.requestEnvelope.request.type === 'IntentRequest'
-    && handlerInput.requestEnvelope.request.intent.name === 'OpenChannelIntent';
+    && handlerInput.requestEnvelope.request.intent.name === 'OpenChannelIntent'
+    && handlerInput.requestEnvelope.request.dialogState === 'STARTED';
   },
   handle(handlerInput) {
+
+    let speechText = "";
+    let repromptText = "";
+
+    let sessionAttributes = handlerInput.attributesManager.getSessionAttributes(); //get the user from the sessionVariables
+    let user = new User(JSON.parse(sessionAttributes.user));
+
+    //Check if the user has any registered addresses
+    if(user.getAddressBook().getLength()) {
+
+      speechText += "Who would you like to open a channel with? ";
+      speechText += "Your address book currently contains. ";
+      let addressList = user.getAddressBook().getAllAddresses();
+      for(var i = 0; i<addressList.length; i++)
+        speechText += addressList[i].getNickname() + ". ";
+      //How much would you like to commit to the channel
+
+      const currentIntent = handlerInput.requestEnvelope.request.intent;
+
+      return handlerInput.responseBuilder
+      .speak(speechText)
+      .reprompt(repromptText)
+      .addDelegateDirective(currentIntent)
+      .getResponse();
+    }
+    else { //The user currently has no addresses
+      speechText += "You currently have nobody in your address book. ";
+      speechText += "You cannot open a new channel until you have at least "
+      speechText += "one address saved in your address book. You can add a new ";
+      speechText += "address to your address book by visting the website. ";
+
+      return handlerInput.responseBuilder
+        .speak(speechText)
+        .reprompt(repromptText)
+        .getResponse();
+    }
+  },
+}
+
+const InProgressOpenChannelHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+    && handlerInput.requestEnvelope.request.intent.name === 'OpenChannelIntent'
+    && handlerInput.requestEnvelope.request.dialogState === 'IN_PROGRESS';
+  },
+  handle(handlerInput) {
+
+    let speechText = "";
+    let repromptText = "";
+
+    //get user data
+    let sessionAttributes = handlerInput.attributesManager.getSessionAttributes(); //get the user from the sessionVariables
+    let user = new User(JSON.parse(sessionAttributes.user));
+
+    let givenNickname = handlerInput.requestEnvelope.request.intent.slots.nickname.value;
+    let givenSatoshis = handlerInput.requestEnvelope.request.intent.slots.amount.value;
+
+    const currentIntent = handlerInput.requestEnvelope.request.intent;
+
+    //check that address exists
+    if(!(user.getAddressBook().isNicknameInAddressBook(givenNickname))) {
+      speechText += "I am sorry that name was not found in your address book. ";
+      speechText += "Who would you like to open a channel with? ";
+      return handlerInput.responseBuilder
+        .speak(speechText)
+        .reprompt(repromptText)
+        .addElicitSlotDirective('nickname', currentIntent)
+        .getResponse();
+    }
+
+    //check that the user has enough satoshis
+
+    return handlerInput.responseBuilder
+      .speak(speechText)
+      .reprompt(repromptText)
+      .addDelegateDirective()
+      .getResponse();
+  },
+}
+
+//Initiates the process of opening a new channel
+const CompletedOpenChannelHandler = {
+  canHandle(handlerInput) {
+    return handlerInput.requestEnvelope.request.type === 'IntentRequest'
+    && handlerInput.requestEnvelope.request.intent.name === 'OpenChannelIntent'
+    && handlerInput.requestEnvelope.request.dialogState === 'COMPLETED';
+  },
+  async handle(handlerInput) {
     let speechText = "";
     let repromptText = "";
 
@@ -150,30 +251,30 @@ const OpenChannelHandler = {
 
     let user = new User(JSON.parse(sessionAttributes.user));
 
-    //Check if the user has any registered addresses
-    if(user.getAddressBook().length) {
+    let givenNickname = handlerInput.requestEnvelope.request.intent.slots.nickname.value;
+    let givenSatoshis = handlerInput.requestEnvelope.request.intent.slots.amount.value;
 
-      //Who would you like to open a channel with?
-      //How much would you like to commit to the channel
-    }
-    else { //The user currently has no addresses
-      speechText += "You currently have nobody in your address book. ";
-      speechText += "You cannot open a new channel until you have at least "
-      speechText += "one address saved in your address book. You can add a new ";
-      speechText += "address to your address book by visting the website. ";
+    speechText += "COMPLETED open channel";
+
+
+    //open the channel
+    var request = {
+      node_pubkey: (user.getAddressBook().getAddressFromNickname(givenNickname)).getPubKey(),
+      local_funding_amount: givenSatoshis
     }
 
-    //GetInfo test
-    /*let request = {};
-    lightning.getInfo(request, function(err, response) {
-      if(err) {
-        speechText += "Error when getting info. ";
-        console.log(err);
-      }
-      else {
-        speechText += "Successfully got info. ";
-        console.log(response);
-      }
+    //Use gRPC to open a channel
+    //Make sure to check that the channel remains open
+    /*var call = lightning.openChannel(request);
+    call.on('data', function(response) {
+    // A response was received from the server.
+    console.log(response);
+    });
+    call.on('status', function(status) {
+    // The current status of the stream.
+    });
+    call.on('end', function() {
+    // The server has closed the stream.
     });*/
 
     handlerInput.attributesManager.setSessionAttributes(sessionAttributes);
@@ -291,7 +392,7 @@ const AddNewAddressHandler = {
     let speechText = "";
     let repromptText = "";
 
-    speechText += "Handle adding new address. ";
+    speechText += "To add a new address please visit our website. ";
 
     return handlerInput.responseBuilder
       .speak(speechText)
@@ -469,7 +570,9 @@ exports.handler = skillBuilder
     SendPaymentHandler,
     RequestPaymentHandler,
     ChannelsMenuHandler,
-    OpenChannelHandler,
+    StartedOpenChannelHandler,
+    CompletedOpenChannelHandler,
+    InProgressOpenChannelHandler,
     CloseChannelHandler,
     ListOpenChannelsHandler,
     GetInformationAboutOpenChannelHandler,

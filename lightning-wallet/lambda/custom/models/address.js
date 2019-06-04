@@ -1,7 +1,12 @@
-function Address(nickname, pubKey) {
+function Address(nickname, pubKey, object) {
 
-  this.nickname = nickname;
-  this.pubKey = pubKey;
+  if(object==undefined) {
+    this.nickname = nickname;
+    this.pubKey = pubKey;
+  }
+  else {
+    Object.assign(this, object); //copy constructor for object
+  }
 
 }
 

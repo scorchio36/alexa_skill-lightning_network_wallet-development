@@ -1,4 +1,5 @@
 const ChannelList = require('./channel_list');
+const Address = require('./address')
 const AddressBook = require('./address_book');
 
 function User(object) {
@@ -14,6 +15,11 @@ function User(object) {
   else {
   //a User object after JSON.parse
     Object.assign(this, object); //copy constructor for object
+    this.addressBook = new AddressBook(this.addressBook);
+
+    for(var i=0; i<this.addressBook.getLength(); i++) {
+      this.addressBook.getAllAddresses()[i] = new Address("", "", this.addressBook.getAllAddresses()[i]);
+    }
   }
 
 }
