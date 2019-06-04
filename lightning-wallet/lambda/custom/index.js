@@ -256,6 +256,8 @@ const CompletedOpenChannelHandler = {
 
     speechText += "COMPLETED open channel";
 
+    //channel object should be created and added to the user object. This
+    //can be used later when the user wants to close or view a channel
 
     //open the channel
     var request = {
